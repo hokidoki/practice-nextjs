@@ -212,3 +212,52 @@ export default function links() {
 `v12`의 사용방법을 그대로 `Link`에 적용하고자 할 때는 `legacyBehavior` props를 사용하면 된다.
 
 `legacyBehavior`속성을 사용하면, `Link`가 더 이상 `a`태그를 대체 하지 않기 때문에, `style`과 같은 속성을 사용하려면 자식인 `a`태그에게 전달해야 한다.
+
+## useRouter 기초
+
+`useRouter`는 `Link`의 기능을 수동으로 작성하는 것과 동일하다. 그렇기에, `a`태그가 아닌 다른 요소를 링크로 활용할 때 주로 사용된다.
+
+다음은 `button`을 이용해, 라우팅을 구현한 예시이다.
+
+```tsx
+import { useRouter } from "next/router";
+
+export default function links() {
+  const router = useRouter();
+
+  return (
+    <main>
+      <h1>Links</h1>
+      {/* <div style={{ height: "200vh" }} /> */}
+      <button onClick={() => router.push("/section1/getStaticProps")}>
+        GetStaticProps
+      </button>
+    </main>
+  );
+}
+```
+
+`Link`태그와 달리 `useRouter`는 `pre-fetch`를 자동으로 하지 않으며, 사용자가 직접 구성해야 한다.
+
+```tsx
+import React, { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+export default function links() {
+  const router = useRouter();
+  const link = "/section1/getStaticProps";
+
+  useEffect(() => {
+    router.prefetch(link);
+  }, []);
+
+  return (
+    <main>
+      <h1>Links</h1>
+      {/* <div style={{ height: "200vh" }} /> */}
+      <button onClick={() => router.push(link)}>GetStaticProps</button>
+    </main>
+  );
+}
+```
