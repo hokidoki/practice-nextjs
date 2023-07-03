@@ -129,3 +129,86 @@ export async function getStaticProps() {
   };
 }
 ```
+
+## Link
+
+`CSR`의 경우, 모든 페이지에 대한 정보가 'script'파일에 존재하기 때문에 스크립트 파일이 굉장히 무겁다. 이와 반대로 `SSR` or `SSG`로 생성된 페이지는 해당 페이지에 대한 정보만을 가지고 있기 때문에, 굉장히 가벼운 것이 장점이다.
+
+보통 `SSG` or `SSR`은 다른 페이지에 대한 정보가 존재하지 않기 때문에, `a`로 페이지 이동시 화면 깜빡임과 동시에 서버로부터 HTML, css, javascript 파일들을 추가로 요청하게 된다. 그러나, `next.js`의 `next/link`를 이용하면, 페이지 이동시 `CSR`과 같이 동작하여 화면 깜빡임 없이 동작해 더 부드러운 이동이 가능하다.
+
+`next/link`를 사용하면, 화면상에 `Link`컴포넌트가 존재 할 때, 서버로부터 이동가능한 경로의 `JSON`(화면에 필요한 데이터를 패칭한 `getStaticProps` 반환 값) 파일과 `JS`(컴포넌트 구성 정보)파일들을 서버로부터 요청하게 된다. (클라이언트 영역 밖으로 링크가 있으면, 서버로 부터 이동 가능한 경로의 `js`파일과 `json` 파일을 요청하지 않는다.)
+
+`next/link`의 사용방법은 다음과 같다.
+
+```tsx
+import React from "react";
+import Link from "next/link";
+
+export default function links() {
+  return (
+    <main>
+      <h1>Links</h1>
+      <Link href="/section1/getStaticProps">/getStaticProps</Link>
+    </main>
+  );
+}
+```
+
+다음 예시코드는 `js`와 `json`이 클라이언트 렉트에서 존재할때만 패칭이 된다는 것을 확인 할 수 있는 예시이다.
+
+```tsx
+export default function links() {
+  return (
+    <main>
+      <h1>Links</h1>
+      <div style={{ height: "200vh" }} />
+      <Link href="/section1/getStaticProps">/getStaticProps</Link>
+    </main>
+  );
+}
+```
+
+`a` 태그를 링크로 사용하게 되면, 더 이상 이동가능한 경로의 `js`파일과 `json`파일을 패칭하지 않게된다.
+
+```tsx
+export default function links() {
+  return (
+    <main>
+      <h1>Links</h1>
+      <div style={{ height: "200vh" }} />
+      <a href="/section1/getStaticProps">/getStaticProps</a>
+      {/* <Link href="/section1/getStaticProps">/getStaticProps</Link> */}
+    </main>
+  );
+}
+```
+
+### natvie a props
+
+Link태그는 `a`태그를 완전히 대체 할 수 있기에, `a`태그에서 사용가능한 props를 그대로 사용가능하다.
+
+**Note** `Link`태그 내부에 `a`태그가 전달되는 것은 `legacyBehavior`속성을 사용 했을 때만 가능하다.
+
+다음은 `Link`태그에 `style` props를 적용한 예시이다.
+
+```tsx
+export default function links() {
+  return (
+    <main>
+      <h1>Links</h1>
+      <div style={{ height: "200vh" }} />
+      <Link style={{ color: "red" }} href="/section1/getStaticProps">
+        /getStaticProps
+      </Link>
+    </main>
+  );
+}
+```
+
+### legacyBehavior
+
+`v12`버전에서는 `Link` 컴포넌트의 자식으로 `a`태그를 전달하였지만 `v13`에서는 `link` 컴포넌트가 `a`태그를 완전히 대체할 수 있게 되어 `Link`컴포넌트 단독으로 사용된다.
+
+`v12`의 사용방법을 그대로 `Link`에 적용하고자 할 때는 `legacyBehavior` props를 사용하면 된다.
+
+`legacyBehavior`속성을 사용하면, `Link`가 더 이상 `a`태그를 대체 하지 않기 때문에, `style`과 같은 속성을 사용하려면 자식인 `a`태그에게 전달해야 한다.
