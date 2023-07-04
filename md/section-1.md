@@ -362,3 +362,40 @@ export default function Example({ data }: Props) {
   );
 }
 ```
+
+## Client-side-render
+
+`CSR`은 page에서 export 되는 `getServerSideProps`나 `getStaticProps`를 제거한 뒤, page를 `export default`키워드에 전달하면된다.
+
+`page`에서 작동하는 동적인 부분은 모두 `hook`에서 동작해야 한다.
+
+만약 동기적 코드이지만 `pre-render`당시, 알 수 없는 값들이 사용되는 컴포넌트들은 `dynamic` 함수를 이용해, `ssr`때 사용되지 않고 스크립트가 동작할 때 렌더링 되도록 해야한다.
+
+아래는 예시코드이다.
+
+```tsx
+import React, { useEffect, useState } from "react";
+import { delay } from "@/mock";
+import dynamic from "next/dynamic";
+
+const NoSSR = dynamic(() => import("@/components/NoSSR"), {
+  ssr: false,
+});
+
+export default function Example() {
+  const [data, setData] = useState(0);
+
+  useEffect(() => {
+    const t = 2 * 1000;
+    delay(Math.random(), t).then(setData);
+  }, []);
+
+  return (
+    <div>
+      <h1>getServerSideProps</h1>
+      <div>Data :{data}</div>
+      <NoSSR />
+    </div>
+  );
+}
+```
