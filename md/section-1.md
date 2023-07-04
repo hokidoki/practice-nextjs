@@ -275,3 +275,90 @@ export default function links() {
 ### server/pages/\*
 
 `server/pages`경로에는 `pre-rendering`된 `html`파일과 `getStaticProps`로 패칭된 `json` 및 서버가 페이지를 재 생성할 때 필요한 `js`파일들이 존재한다.
+
+## getServerSideProps
+
+`getServerSideProps`는 `SSR`을 지원하는 페이지에서 사용되는 함수로써 `getStaticSideProps`와 모습이 매우 유사하다. 다만 `SSR`의 특성상 페이지가 요청될 때마다 서버에서는 `pre-render`를 진행해야 하기에, 사용자 경험이 좋지 않다.
+
+다음과 같은 상황에서 적합하다.
+
+1. 사용자 인증정보에 따라 다르게 보여주어야 하는 페이지
+2. 페이지가 동적으로 변경되지만 보안이 중요한 페이지.
+
+다음은 예시코드이다.
+
+```tsx
+import React from "react";
+import { delay } from "@/mock";
+import { GetServerSidePropsContext } from "next";
+
+export async function getServerSideProps({ res }: GetServerSidePropsContext) {
+  const t = 2 * 1000;
+  const data = await delay(Math.random(), t);
+
+  return {
+    props: {
+      data,
+    },
+  };
+}
+
+interface Props {
+  data: number;
+}
+
+export default function Example({ data }: Props) {
+  return (
+    <div>
+      <h1>getServerSideProps</h1>
+      <div>Data :{data}</div>
+    </div>
+  );
+}
+```
+
+### Cache-control header
+
+`getServerSideProps`에서도 `configuration`파라메터의 `res.setHeader`를 이용하여 `revalidate`와 동일한 기능을 구현할 수 있다.
+
+`Cache-control` 헤더에 `s-maxage`와 `stale-while-ravalidate` 값을 지정 할 수 있는데, 각 용도는 다음과 같다.
+
+- public : 모든 사람과 중간 서버가 캐시를 저장 할 수 있다. (반대는 private)
+- s-maxage : 이전 요청으로 부터 {x}초 이내에 반복되는 경우, 캐시된 값은 여전히 최신 상태이다. (재검증 없이 사용됨)
+- stale-while-revalidate : s-maxage에서 {x}초 이내에 요청되는 경우, 캐시된 문서를 전달하지만 백그라운드에서 최신화를 진행한다.
+  - 이 값을 초과한 뒤 요청이 되면 캐싱된 값은 `Stale` 상태가 되고, 서버에서 `pre-render`가 완료될 때 까지 `pending` 상태가 된다.
+
+```tsx
+import React from "react";
+import { delay } from "@/mock";
+import { GetServerSidePropsContext } from "next";
+
+export async function getServerSideProps({ res }: GetServerSidePropsContext) {
+  const t = 2 * 1000;
+  const data = await delay(Math.random(), t);
+
+  res.setHeader(
+    `Cache-control`,
+    `public , s-maxage=5, stale-while-revalidate=10`
+  );
+
+  return {
+    props: {
+      data,
+    },
+  };
+}
+
+interface Props {
+  data: number;
+}
+
+export default function Example({ data }: Props) {
+  return (
+    <div>
+      <h1>getServerSideProps</h1>
+      <div>Data :{data}</div>
+    </div>
+  );
+}
+```
