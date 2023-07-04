@@ -237,7 +237,7 @@ export default function links() {
 }
 ```
 
-`Link`태그와 달리 `useRouter`는 `pre-fetch`를 자동으로 하지 않으며, 사용자가 직접 구성해야 한다.
+`Link`태그와 달리 `useRouter`는 `pre-fetch`를 자동으로 하지 않으며, 사용자가 직접 구성해야 한다. (prefetch 기능은 production 환경에서만 동작)
 
 ```tsx
 import React, { useEffect } from "react";
@@ -261,3 +261,17 @@ export default function links() {
   );
 }
 ```
+
+## .next 기본
+
+`.next` 폴더는 `next build`명령어로 생성된 폴더이다. 이 폴더는 서버가 실행되었을 때 필요한 코드들의 집합이다.
+
+### static/chunks/pages/\*
+
+`static/chunks/pages` 경로에는 `pages`에서 작성된 페이지들을 렌더링 하기 위한 `js`파일들이 존재한다.
+
+파일의 이름은 `{filename}-{hash}`형태를 가지며 변경되지 않는다.
+
+### server/pages/\*
+
+`server/pages`경로에는 `pre-rendering`된 `html`파일과 `getStaticProps`로 패칭된 `json` 및 서버가 페이지를 재 생성할 때 필요한 `js`파일들이 존재한다.
