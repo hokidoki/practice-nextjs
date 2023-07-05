@@ -12,6 +12,8 @@ body {
   height: 100%;
 }
 
+// 전역 상태에서 접근.
+// dispaly: contents를 적용하면 스타일링에서 무시되고, 컨텐츠요소가 상위 요소에 자식으로 입력됨
 @layer base {
   #__next {
     display: contents;
