@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { delay } from "@/mock";
 import dynamic from "next/dynamic";
 
-const NoSSR = dynamic(() => import("@/components/NoSSR"), {
+const NoSSR = dynamic(() => import("@/components/section1/NoSSR"), {
   ssr: false,
 });
 
