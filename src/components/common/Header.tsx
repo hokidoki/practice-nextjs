@@ -12,7 +12,7 @@ const HeaderComponent = ({ onClickLogo, rightElements }: Props) => {
   return (
     <header className={styles.header}>
       <div className={styles.flexItem}>
-        <Link href="/" className={styles.box}>
+        <Link href="/" onClick={onClickLogo} className={styles.box}>
           <Image
             src="/inflearn.png"
             width={110}
@@ -21,11 +21,7 @@ const HeaderComponent = ({ onClickLogo, rightElements }: Props) => {
           />
         </Link>
       </div>
-      <div className={styles.flexItem}>
-        {rightElements && (
-          <div className={styles.flexItem}>{rightElements}</div>
-        )}
-      </div>
+      {rightElements && <div className={styles.flexItem}>{rightElements}</div>}
     </header>
   );
 };
