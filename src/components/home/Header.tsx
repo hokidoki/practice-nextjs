@@ -29,10 +29,16 @@ const HomeHeader = () => {
           className={styles.box}
           style={{ marginRight: 8 }}
           key="button"
+          aria-label="현재 위치 클립보드 복사"
         >
           <AiOutlineShareAlt size={20} />
         </button>,
-        <Link href="/feedback" className={styles.box} key="link">
+        <Link
+          href="/feedback"
+          className={styles.box}
+          key="link"
+          aria-label="피드백 페이지로 이동"
+        >
           <VscFeedback size={20} />
         </Link>,
       ]}

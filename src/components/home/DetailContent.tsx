@@ -25,6 +25,7 @@ const DetailContent = ({ currentStore, expanded }: Props) => {
               src={image}
               alt=""
               fill
+              sizes="120"
               style={{ objectFit: "cover" }}
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO0WhFsDwADzwF2mLYSJgAAAABJRU5ErkJggg=="
