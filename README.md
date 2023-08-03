@@ -3,12 +3,12 @@
 ## Page Route
 
 1. /
-   1. contents로 redirect.
+   1. contents로 redirect. - [x]
 2. /contents
    1. 게시물 리스트
       1. contents/:id로 이동
    2. 서버사이드로 렌더링
-   3. 게시물 작성페이지
+   3. 게시물 작성페이지로 이동
 3. /contents/:id
    1. 특정 게시물
    2. 렌더링 방식 아직 미정
