@@ -9,3 +9,8 @@ export const flexbox = ({ direction = "row", justify = "flex-start", align = "fl
     align-items: ${align} ;
 `
 
+export const fullfill = () => css`
+    width : 100%;
+    height: 100%;
+`
+
