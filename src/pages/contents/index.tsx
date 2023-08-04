@@ -1,15 +1,12 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import ContentsList from '@/components/List/ContentsList';
 import { dehydrate } from '@tanstack/react-query';
-import { MinContent } from '@/types/api';
 import { test } from '@/api/contents';
 import { gsspCallbackWithRQ, gsspWithRq } from '@/utils/server-utils';
 import { useContents, UNIQUE_KEY } from '@/hooks/useContents';
-import PageLayout from '@/components/contents/PageLayout';
-import Lists from '@/components/contents/Lists';
-import { map, pipe, toArray } from '@fxts/core';
-import List from '@/components/contents/List';
+import { BoardPage } from '@/components/PageLayout/BoardPage';
 
-const callback: gsspCallbackWithRQ = async (client, ctx) => {
+const callback: gsspCallbackWithRQ = async (client, _) => {
   await client.prefetchQuery({ queryFn: test, queryKey: UNIQUE_KEY });
   return {
     props: {
@@ -21,15 +18,11 @@ const callback: gsspCallbackWithRQ = async (client, ctx) => {
 export const getServerSideProps = gsspWithRq(callback);
 
 export default function Contents() {
-  const { data } = useContents();
-  const mapping = useCallback(
-    (c: MinContent) => <List key={c.id} {...c} />,
-    []
-  );
+  const { data: contents } = useContents();
 
   return (
-    <PageLayout>
-      <Lists>{pipe(data, map(mapping), toArray)}</Lists>
-    </PageLayout>
+    <BoardPage>
+      <ContentsList contents={contents} />
+    </BoardPage>
   );
 }
