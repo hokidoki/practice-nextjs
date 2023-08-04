@@ -8,7 +8,7 @@ const redirects = async () => [
 ]
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   redirects
 }
 
