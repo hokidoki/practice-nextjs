@@ -1,4 +1,4 @@
-import { MinContent } from '@/api/types';
+import { MinContent } from '@/types/api';
 import Link from 'next/link';
 import styled from 'styled-components';
 

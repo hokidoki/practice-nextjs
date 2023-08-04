@@ -1,5 +1,5 @@
 import { curry, map, pipe, range, toArray } from "@fxts/core";
-import type { MinContent } from "./types";
+import type { MinContent } from "../types/api";
 
 
 const mappingMinContent = curry((i: number) => ({ id: i.toString(), title: `TITLE - ${i}`, summary: "summary" }));

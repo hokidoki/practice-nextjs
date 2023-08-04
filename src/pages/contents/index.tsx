@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { dehydrate } from '@tanstack/react-query';
-import { MinContent } from '@/api/types';
+import { MinContent } from '@/types/api';
 import { test } from '@/api/contents';
 import { gsspCallbackWithRQ, gsspWithRq } from '@/utils/server-utils';
 import { useContents, UNIQUE_KEY } from '@/hooks/useContents';
