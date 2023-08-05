@@ -1,4 +1,4 @@
-import { test } from "@/api/contents";
+import { getContents } from "@/api/handler/contents";
 import { useQuery } from "@tanstack/react-query";
 
 /**
@@ -8,11 +8,10 @@ export const UNIQUE_KEY = ["CONTENTS"];
 
 export function useContents() {
     const q = useQuery({
-        queryFn: test,
+        queryFn: getContents,
         refetchOnMount: false,
         queryKey: UNIQUE_KEY,
         initialData: []
-
     });
 
     return { ...q }

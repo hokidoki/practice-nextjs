@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export function ContentsListItem({ id, title, summary }: ContentListItemProps) {
   return (
-    <Link href={`/contents/${id}`} style={{ display: 'contents' }} key={id}>
+    <Link href={`/contents/${id}`} style={{ display: 'contents' }}>
       <ContentListItemStyles.Layout>
         <ContentListItemStyles.Title>{title}</ContentListItemStyles.Title>
         <ContentListItemStyles.Summary>{summary}</ContentListItemStyles.Summary>

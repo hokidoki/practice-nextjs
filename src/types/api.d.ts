@@ -1,11 +1,10 @@
-/**
- * 유저 정보
- * @interface
- */
-export interface User {
-    id: string,
-    nickname: string
+import type { AxiosResponse } from "axios";
+
+interface Response<T> {
+    data: T,
+    message: string
 }
+export type R<T = any, D = any> = Promise<AxiosResponse<T, D>>
 /**
  * 컨텐츠의 요약된 정보.
  * @interface
@@ -19,10 +18,6 @@ export interface MinContent {
      * 글 제목
      */
     title: string
-    /**
-     * 글 작성자
-     */
-    author: User,
     /**
      * 요약된 정보로 20글자 이내의 문자열을 가집니다. 
      */
@@ -43,6 +38,6 @@ export interface Content extends Omit<MinContent, "summary"> {
  * 댓글 정보
  * @interface
  */
-export interface Comment extends Content {
+export interface Comment extends Omit<Content, "title"> {
     articleId: string
 }
