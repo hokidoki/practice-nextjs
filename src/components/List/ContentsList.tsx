@@ -6,7 +6,7 @@ export default function ContentsList({ contents }: ContentsListProps) {
   return (
     <ContentsListStyles.Layout>
       {contents.map((v) => (
-        <ContentsListItem {...v} />
+        <ContentsListItem {...v} key={v.id} />
       ))}
     </ContentsListStyles.Layout>
   );
