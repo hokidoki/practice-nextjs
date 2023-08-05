@@ -38,7 +38,6 @@ export interface MinContent {
  */
 export interface Content extends Omit<MinContent, "summary"> {
     article: string,
-    comments: Comment[]
 }
 /**
  * 댓글 정보
