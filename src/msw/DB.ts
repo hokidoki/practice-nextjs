@@ -1,16 +1,17 @@
 import { pipe, delay, slice, join, map, find, append, toArray, filter, isUndefined, findIndex } from "@fxts/core";
-import { staticUsers, staticComments, staticContents } from "./datas";
-import { Content, MinContent, User, Comment } from "@/types/api";
-import { randomUUID } from "crypto";
+import { staticComments, staticContents } from "./datas";
+import { Content, MinContent, Comment } from "@/types/api";
+import { v4 as randomUUID } from "uuid";
+
+
 
 const db = (() => {
     const tenMil = 10;
     const summaryLength = 20;
     const convertSummary = (str: string) => pipe(str, slice(0, summaryLength), join(""));
-    const convertMinContent = (c: Content): MinContent => pipe(c, ({ id, title, author, createdAt, article }) => ({
+    const convertMinContent = (c: Content): MinContent => pipe(c, ({ id, title, createdAt, article }) => ({
         id,
         title,
-        author,
         createdAt,
         summary: convertSummary(article)
     }))
@@ -29,20 +30,20 @@ const db = (() => {
         }
     }
 
-    let users = [...staticUsers];
     let contents = [...staticContents];
     let comments = [...staticComments];
 
-    const getContents = delaiedFn(() =>
+    const getContents = delaiedFn<void, MinContent[]>(() =>
         pipe(
             contents,
             map(convertMinContent),
+            toArray
         )
     )
 
     const getContent = delaiedFn((id: string) => find((c) => c.id === id, contents))
     const postContent = delaiedFn((content: Content) => {
-        contents = pipe(contents, append({ ...content, id: randomUUID() as string }), toArray);
+        contents = pipe(contents, append({ ...content, id: randomUUID() as string, createdAt: new Date().toUTCString() }), toArray);
         return content;
     })
     const putContent = delaiedFn((content: Content) => {
@@ -68,7 +69,7 @@ const db = (() => {
     })
 
     const postComment = delaiedFn((comment: Comment) => {
-        comments = pipe(comments, append({ ...comment, id: randomUUID() as string }), toArray);
+        comments = pipe(comments, append({ ...comment, id: randomUUID() as string, createdAt: new Date().toUTCString() }), toArray);
         return comments;
     })
 
