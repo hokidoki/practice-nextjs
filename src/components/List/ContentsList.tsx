@@ -5,6 +5,7 @@ import { ContentsListItem } from '../ListItem/ContentsListItem';
 export default function ContentsList({ contents }: ContentsListProps) {
   return (
     <ContentsListStyles.Layout>
+      <ContentsListStyles.AddContentButton />
       {contents.map((v) => (
         <ContentsListItem {...v} key={v.id} />
       ))}
