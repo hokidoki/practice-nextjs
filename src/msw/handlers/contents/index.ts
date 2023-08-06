@@ -1,6 +1,6 @@
+import DB from "@/msw/DB";
 import { BASE_URL } from "@/api/base";
 import { pathmaker } from "@/api/utils";
-import DB from "@/msw/DB";
 import { Content } from "@/types/api";
 import { rest } from "msw";
 
@@ -86,9 +86,25 @@ const postContent: Parameters<typeof rest.get>[1] = async (req, res, ctx) => {
 };
 
 
+const getComments: Parameters<typeof rest.get>[1] = async (req, res, ctx) => {
+    const { contentId } = req.params;
+
+    if (typeof contentId !== "string") return res(
+        ctx.status(400)
+    )
+
+    return res(
+        ctx.status(200),
+        ctx.json({
+            message: "OK",
+            data: await DB.getComments(contentId)
+        })
+    )
+}
 export default [
     rest.get(path(""), getContentsList),
     rest.get(path(":contentId"), getContent),
     rest.post(path(""), postContent),
-    rest.put(path(":contentId"), putContent)
+    rest.put(path(":contentId"), putContent),
+    rest.get(path(":contentId", "comments"), getComments)
 ]

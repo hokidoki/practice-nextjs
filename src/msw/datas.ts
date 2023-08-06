@@ -1,17 +1,16 @@
 import { Content, Comment } from "@/types/api"
 import { range, map, pipe, toArray, flat } from "@fxts/core"
-import { v4 as randomUUID } from "uuid";
 
 const randomInt = (max: number = 10) => Math.floor((Math.random()) * max);
 
-const CreateContentMock = (title: string, article: string): Content => ({
-    id: randomUUID(),
+const CreateContentMock = (id: string, title: string, article: string): Content => ({
+    id,
     title,
     article,
     createdAt: new Date().toUTCString()
 })
-const CreateCommentsMock = (articleId: string, title: string, article: string): Comment => ({
-    id: randomUUID(),
+const CreateCommentsMock = (id: string, articleId: string, article: string): Comment => ({
+    id,
     articleId,
     article,
     createdAt: new Date().toUTCString()
@@ -19,13 +18,13 @@ const CreateCommentsMock = (articleId: string, title: string, article: string): 
 
 const CreateRandomLengthComment = (content: Content) => pipe(
     range(randomInt(10)),
-    map((i) => CreateCommentsMock(content.id, `commnet-title-${i}`, `comment-${i}`)),
+    map((i) => CreateCommentsMock(i.toString(), content.id, `commnet-${i}`)),
     toArray
 )
 
 export const staticContents: Content[] = pipe(
     range(10),
-    map((index) => CreateContentMock(`Title - ${index}`, `Article - ${index}`)),
+    map((index) => CreateContentMock(index.toString(), `Title - ${index}`, `Article - ${index}`)),
     toArray);
 
 export const staticComments: Comment[] = pipe(
