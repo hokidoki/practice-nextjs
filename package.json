@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "RUNNING_ENV=DEV next dev",
+    "dev": "NEXT_PUBLIC_API_MOCKING=DEV next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
