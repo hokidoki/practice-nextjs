@@ -9,7 +9,7 @@ import initMocks from '@/msw';
  * This Project is For test
  * so always using mock
  */
-initMocks();
+if (process.env.NEXT_PUBLIC_API_MOCKING === 'DEV') initMocks();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

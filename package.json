@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "RUNNING_ENV=DEV next dev",
+    "dev": "NEXT_PUBLIC_API_MOCKING=DEV next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -21,12 +21,15 @@
     "msw": "^1.2.3",
     "next": "13.4.12",
     "react": "18.2.0",
+    "react-contenteditable": "^3.3.7",
     "react-dom": "18.2.0",
+    "sanitize-html": "^2.11.0",
     "styled-components": "^6.0.6",
     "typescript": "5.1.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/sanitize-html": "^2.9.0",
     "@types/styled-components": "^5.1.26",
     "@types/uuid": "^9.0.2",
     "eslint-config-prettier": "^8.9.0",

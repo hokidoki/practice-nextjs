@@ -3,7 +3,8 @@ import styled from 'styled-components';
 const BoardPageStyles = (() => {
     const Layout = styled.div`
     ${({ theme }) => theme.mixin.flexbox({ direction: 'column', align: 'center' })};
-    ${({ theme }) => theme.mixin.fullfill()};
+    width: 100%;
+    min-height: 100%;
     background-color: ${({ theme }) => theme.backgroundcolor.layer_1};
     padding: 40px;
 `;

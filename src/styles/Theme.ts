@@ -4,6 +4,7 @@ const textcolor = {
     plaintext: "#9aa0a6",
     summary: "#bdc1c6",
     emphasis: "white",
+    warn: "palevioletred"
 }
 
 const backgroundcolor = {
