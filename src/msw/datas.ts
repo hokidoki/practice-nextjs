@@ -1,9 +1,7 @@
 import { Content, Comment } from "@/types/api"
 import { range, map, pipe, toArray, flat } from "@fxts/core"
 
-const randomInt = (max: number = 10) => Math.floor((Math.random()) * max);
-
-const CreateContentMock = (id: string, title: string, article: string): Content => ({
+export const CreateContentMock = (id: string, title: string, article: string): Content => ({
     id,
     title,
     article,
@@ -17,7 +15,7 @@ const CreateCommentsMock = (id: string, articleId: string, article: string): Com
 })
 
 const CreateRandomLengthComment = (content: Content) => pipe(
-    range(randomInt(10)),
+    range(5),
     map((i) => CreateCommentsMock(i.toString(), content.id, `commnet-${i}`)),
     toArray
 )

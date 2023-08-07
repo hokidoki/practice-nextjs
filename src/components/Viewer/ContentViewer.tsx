@@ -30,7 +30,11 @@ export default function ContentViewer({
           </ContentViewerStyles.ControlButton>
         </ContentViewerStyles.Controlls>
       </ContentViewerStyles.ViewerHeader>
-      <ContentViewerStyles.Article>{article}</ContentViewerStyles.Article>
+      <ContentViewerStyles.Article
+        dangerouslySetInnerHTML={{
+          __html: article.replace(/(?:\r\n|\r|\n)/g, '<br>'),
+        }}
+      />
     </ContentViewerStyles.Layout>
   );
 }

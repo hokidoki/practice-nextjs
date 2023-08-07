@@ -23,6 +23,7 @@ export default function Contents() {
   const { data: contents } = useContents();
   const router = useRouter();
   const newArticleButtonOnClick = useCallback(() => router.push('/editor'), []);
+
   return (
     <BoardPage>
       <ContentsList

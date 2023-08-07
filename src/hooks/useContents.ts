@@ -9,7 +9,7 @@ export const UNIQUE_KEY = ["CONTENTS"];
 export function useContents() {
     const q = useQuery({
         queryFn: getContents,
-        refetchOnMount: false,
+        refetchOnMount: true,
         queryKey: UNIQUE_KEY,
         initialData: []
     });

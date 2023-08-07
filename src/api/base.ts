@@ -12,9 +12,9 @@ instance.interceptors.response.use((res: AxiosResponse<Response<any>, any>) => {
 }, errorLogger)
 
 export const GET = <T>(url: string, option?: AxiosRequestConfig): Promise<T> => instance.get(url, option).then((v) => v.data);
-export const POST = <T, F>(url: string, data: F, option?: AxiosRequestConfig): Promise<T> => instance.post(url, data, option).then((v) => v.data);
+export const POST = <T, F = any>(url: string, data: F, option?: AxiosRequestConfig): Promise<T> => instance.post(url, data, option).then((v) => v.data);
 export const DELETE = <T>(url: string, option?: AxiosRequestConfig): Promise<T> => instance.delete(url, option).then((v) => v.data);
-export const PUT = <T, F>(url: string, data: F, option?: AxiosRequestConfig): Promise<T> => instance.put(url, data, option).then((v) => v.data);
+export const PUT = <T, F = any>(url: string, data: F, option?: AxiosRequestConfig): Promise<T> => instance.put(url, data, option).then((v) => v.data);
 
 export default instance;
 

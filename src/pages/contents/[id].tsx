@@ -2,7 +2,11 @@ import type { Content, Comment } from '@/types/api';
 import React, { useCallback } from 'react';
 import { dehydrate } from '@tanstack/react-query';
 import { gsspCallbackWithRQ, gsspWithRq } from '@/utils/server-utils';
-import { UNIQUE_KEY, useContentQuery } from '@/hooks/useContent';
+import {
+  UNIQUE_KEY,
+  useContentQuery,
+  useDeleteContent,
+} from '@/hooks/useContent';
 import {
   UNIQUE_KEY as COMMENT_UNIQUE_KEY,
   useCommentQuery,
@@ -15,30 +19,38 @@ import ContentViewer from '@/components/Viewer/ContentViewer';
 import CommentList from '@/components/List/CommentList';
 
 const callback: gsspCallbackWithRQ = async (client, ctx) => {
-  const { id } = ctx.query;
+  try {
+    const { id } = ctx.query;
 
-  if (!isString(id))
+    if (!isString(id))
+      return {
+        notFound: true,
+      };
+    const staticContent = await getContent(id);
+    const staticComments = await getComments(id);
+    await client.prefetchQuery({
+      queryFn: () => getComments(id),
+      queryKey: COMMENT_UNIQUE_KEY(id),
+      initialData: staticComments,
+    });
+    await client.prefetchQuery({
+      queryFn: () => getContent(id),
+      queryKey: UNIQUE_KEY(id),
+      initialData: staticContent,
+    });
+
+    return {
+      props: {
+        dehydratedState: dehydrate(client),
+        staticContent,
+        staticComments,
+      },
+    };
+  } catch (error) {
     return {
       notFound: true,
     };
-  const staticContent = await getContent(id);
-  const staticComments = await getComments(id);
-  await client.prefetchQuery({
-    queryKey: COMMENT_UNIQUE_KEY(id),
-    initialData: staticComments,
-  });
-  await client.prefetchQuery({
-    queryKey: UNIQUE_KEY(id),
-    initialData: staticContent,
-  });
-
-  return {
-    props: {
-      dehydratedState: dehydrate(client),
-      staticContent,
-      staticComments,
-    },
-  };
+  }
 };
 
 export const getServerSideProps = gsspWithRq(callback);
@@ -50,19 +62,25 @@ interface Props {
 
 export default function ContentPage({ staticContent, staticComments }: Props) {
   const router = useRouter();
-  const { data: content, error: contentsError } = useContentQuery(
-    staticContent.id,
-    staticContent
-  );
-  const { data: comments, error: commentsError } = useCommentQuery(
-    staticContent.id,
-    staticComments
-  );
+  const { mutateAsync, isSuccess } = useDeleteContent();
+  const { data: content } = useContentQuery({
+    contentId: staticContent.id,
+    initialData: staticContent,
+    enabled: false,
+  });
 
-  const deleteButtonOnClick = useCallback((id: string) => {
-    if (confirm('삭제 하시겠습니까?')) console.log('삭제 ㄱ');
-  }, []);
+  const { data: comments } = useCommentQuery({
+    contentId: staticContent.id,
+    initialData: staticComments,
+    enabled: false,
+  });
 
+  const deleteButtonOnClick = useCallback(
+    (id: string) => {
+      if (confirm('삭제 하시겠습니까?')) mutateAsync(id);
+    },
+    [mutateAsync]
+  );
   return (
     <ContentPageLayout title={content.title}>
       <ContentViewer

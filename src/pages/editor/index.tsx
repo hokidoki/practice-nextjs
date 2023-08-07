@@ -1,11 +1,14 @@
+import ContentEditor from '@/components/Editor/ContentEditor';
 import EditorPage from '@/components/PageLayout/EditorPage';
-import React from 'react';
+import { useCreateContent } from '@/hooks/useContent';
+import React, { useCallback } from 'react';
 
 export default function Editor() {
+  const { mutateAsync, isLoading, isError } = useCreateContent();
+
   return (
     <EditorPage>
-      {/*  */}
-      {/*  */}
+      <ContentEditor onSubmit={mutateAsync} />
     </EditorPage>
   );
 }
