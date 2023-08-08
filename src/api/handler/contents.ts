@@ -14,11 +14,7 @@ export const putContent = (content: Content) => PUT<Content>(path(content.id), c
 export const deleteContent = (id: string) => DELETE<string>(path(id));
 
 // Comments
-export const getComments = (contentId: string) => GET<Comment[]>(path(contentId, "comments"));
-export const postComment = (comment: Comment) => POST(path(comment.articleId, "comments"), comment);
-export const putComment = (content: Content) => PUT(path(content.id), content);
-export const deleteComment = ({ contentId, commentId }: { contentId: string, commentId: string }) => DELETE(path(contentId, commentId));
-
-
-
-
+export const getComments = (articleId: string) => GET<Comment[]>(path(articleId, "comments"));
+export const postComment = (comment: { articleId: string, article: string }) => POST<Comment>(path(comment.articleId, "comments"), comment);
+export const putComment = (content: { articleId: string, article: string, id: string }) => PUT<Comment>(path(content.articleId, "comments", content.id), content)
+export const deleteComment = ({ articleId, id }: { articleId: string, id: string }) => DELETE<string>(path(articleId, "comments", id));
