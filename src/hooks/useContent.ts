@@ -6,13 +6,15 @@ import { UNIQUE_KEY as CONTENTS_UNIQUE_KEY } from "./useContents";
 
 export const UNIQUE_KEY = (contentId: string) => ["CONTENTS", contentId];
 
-export function useContentQuery({ contentId, initialData, enabled }: { enabled: boolean, contentId: string, initialData: Content }) {
+export function useContentQuery({ contentId, initialData }: { contentId: string, initialData?: Content }) {
 
+    /**
+     * refetchOnWindowFocus는 confirm이후 window로 focus되면서 작동함
+     */
     const q = useQuery<Content>({
         queryFn: () => getContent(contentId),
-        enabled,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
+        refetchOnMount: true,
+        refetchOnWindowFocus: false,
         queryKey: UNIQUE_KEY(contentId),
         initialData,
     })
@@ -32,7 +34,6 @@ export function useCreateContent() {
             try {
                 await client.invalidateQueries(CONTENTS_UNIQUE_KEY);
                 router.push(`/contents/${data.id}`)
-
             } catch (error) {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
                 router.push('/contents')
@@ -63,6 +64,9 @@ export function usePutContent() {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
                 router.push('/contents')
             }
+        },
+        onError: () => {
+            console.log("ERROR")
         }
     })
 
@@ -82,14 +86,15 @@ export function useDeleteContent() {
         onSuccess: async (data) => {
             try {
                 const contentQueryKey = UNIQUE_KEY(data);
-                client.invalidateQueries(CONTENTS_UNIQUE_KEY);
-                client.removeQueries(contentQueryKey);
-                client.resetQueries(contentQueryKey)
+                client.setQueriesData(contentQueryKey, undefined);
                 router.push(`/contents`);
             } catch (error) {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
                 router.push('/contents')
             }
+        },
+        onError: () => {
+            console.log("ERROR")
         }
     })
 

@@ -6,6 +6,7 @@ import { isString } from '@fxts/core';
 import { GetServerSideProps } from 'next';
 import { getContent } from '@/api/handler/contents';
 import { Content } from '@/types/api';
+import { DashArrayCircleSpinnerWithLayout } from '@/components/Spinner/DashArrayCircleSpinner';
 
 const callback: GetServerSideProps = async (ctx) => {
   try {
@@ -40,14 +41,16 @@ export default function Editor({ staticContent }: Props) {
   const { id, createdAt } = staticContent;
 
   const submitCallback = useCallback(
-    ({ article, title }: { article: string; title: string }) => {
-      mutateAsync({ article, title, id, createdAt });
-    },
+    ({ article, title }: { article: string; title: string }) =>
+      mutateAsync({ article, title, id, createdAt }),
     [id, createdAt, mutateAsync]
   );
 
   return (
     <EditorPage>
+      {isLoading && (
+        <DashArrayCircleSpinnerWithLayout layoutProps={{ position: 'fixed' }} />
+      )}
       <ContentEditor {...staticContent} onSubmit={submitCallback} />
     </EditorPage>
   );
