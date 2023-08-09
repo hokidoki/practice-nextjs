@@ -32,7 +32,7 @@ export default function CommentList({
         setEditCommentId((prev) => (prev === comment.id ? '' : prev));
       });
     },
-    [createComment, setUpdatingCommentIds]
+    [setUpdatingCommentIds, putComment]
   );
 
   const preDeleting = useCallback(
