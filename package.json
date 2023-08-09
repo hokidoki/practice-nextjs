@@ -7,7 +7,9 @@
     "dev": "NEXT_PUBLIC_API_MOCKING=DEV next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "husky install && cp -a .husky/. .git/hooks/",
+    "format": "prettier --cache --write ."
   },
   "dependencies": {
     "@fxts/core": "^0.18.0",

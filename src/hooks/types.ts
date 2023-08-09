@@ -1,3 +1,3 @@
 export type MutationHookOption = {
-    onError?: () => void | Promise<void>
-}
+  onError?: () => void | Promise<void>;
+};

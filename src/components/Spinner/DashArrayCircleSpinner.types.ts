@@ -1,4 +1,2 @@
-import type SpinnerLayoutStyle from "./SpinnerLayout.styles"
-export default interface DashArrayCircleSpinnerProps {
-
-}
+import type SpinnerLayoutStyle from './SpinnerLayout.styles';
+export default interface DashArrayCircleSpinnerProps {}

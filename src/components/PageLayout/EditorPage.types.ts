@@ -1,3 +1,3 @@
-import { WithChildrenProps } from "@/types/global";
+import { WithChildrenProps } from '@/types/global';
 
-export default interface EditorPageProps extends WithChildrenProps { }
+export default interface EditorPageProps extends WithChildrenProps {}

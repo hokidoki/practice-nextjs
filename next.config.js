@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
 const redirects = async () => [
   {
-    source : "/",
-    destination : "/contents",
-    permanent : false
-  }
-]
+    source: '/',
+    destination: '/contents',
+    permanent: false,
+  },
+];
 
 const nextConfig = {
   reactStrictMode: false,
-  redirects
-}
+  redirects,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

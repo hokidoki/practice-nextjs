@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 export interface WithChildrenProps {
-    children?: ReactNode
+  children?: ReactNode;
 }
 
 export interface WithKey {
-    key: string
+  key: string;
 }
