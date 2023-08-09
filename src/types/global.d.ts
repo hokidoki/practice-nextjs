@@ -7,3 +7,8 @@ export interface WithChildrenProps {
 export interface WithKey {
   key: string;
 }
+
+export interface KnownError {
+  code: string;
+  message: string;
+}

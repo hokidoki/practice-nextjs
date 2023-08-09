@@ -25,7 +25,11 @@ const callback: GetServerSideProps = async (ctx) => {
     };
   } catch (error) {
     return {
-      notFound: true,
+      redirect: {
+        permanent: false,
+        destination: '/500',
+      },
+      props: {},
     };
   }
 };
