@@ -14,18 +14,18 @@ export default function ContentEditor({
   const ref = useRef<HTMLDivElement>(null);
   const disabled = useMemo(() => {
     const minimumLength = 3;
-    return title.length < minimumLength || article.length < minimumLength;
-  }, [title, article]);
+    const lengthCondition =
+      title.length < minimumLength || article.length < minimumLength;
+    const sameCondition = title === __title__ && __article__ === article;
+    return sameCondition || lengthCondition;
+  }, [title, article, __title__, __article__]);
 
   const preSubmitHandler = useCallback(
     (title: string, article: string) => {
-      if (title === __title__ && article === __article__)
-        return alert('기존과 동일하게 수정 할 수 없습니다.');
-
       setIsLoading(true);
       onSubmit({ title, article }).catch(() => setIsLoading(false));
     },
-    [__title__, __article__, onSubmit]
+    [onSubmit]
   );
 
   return (
