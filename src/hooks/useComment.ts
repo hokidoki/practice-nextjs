@@ -8,7 +8,6 @@ export const UNIQUE_KEY = (contentId: string) => ["CONTENTS", contentId, "Commen
 
 export function useCommentQuery({ articleId, initialData = [] }: { articleId: string, initialData?: Comment[] }) {
 
-
     const q = useQuery<Comment[]>({
         queryFn: () => getComments(articleId),
         queryKey: UNIQUE_KEY(articleId),
@@ -53,7 +52,6 @@ export function usePutComment({ onError = putError }: MutationHookOption) {
         mutationFn: putComment,
         onSuccess: async (data) => {
             try {
-                console.log(data)
                 // 즉시 무효화 후 리패칭 시도
                 await client.invalidateQueries(UNIQUE_KEY(data.articleId));
             } catch (error) {

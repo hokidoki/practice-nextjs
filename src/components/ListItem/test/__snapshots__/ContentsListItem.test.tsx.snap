@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CommentEditor match snapshot 1`] = `
+exports[`ContentsListItem match snapshot 1`] = `
 .c0 {
   display: flex;
   flex-direction: column;
