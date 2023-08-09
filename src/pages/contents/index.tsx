@@ -6,7 +6,7 @@ import { useContents, UNIQUE_KEY } from '@/hooks/useContents';
 import { BoardPage } from '@/components/PageLayout/BoardPage';
 import { getContents } from '@/api/handler/contents';
 import { useRouter } from 'next/router';
-
+import { NextSeo } from 'next-seo';
 const callback: gsspCallbackWithRQ = async (client, _) => {
   await client.prefetchQuery({ queryFn: getContents, queryKey: UNIQUE_KEY });
 
@@ -25,11 +25,14 @@ export default function Contents() {
   const newArticleButtonOnClick = useCallback(() => router.push('/editor'), []);
 
   return (
-    <BoardPage>
-      <ContentsList
-        contents={contents}
-        newArticleButtonOnClick={newArticleButtonOnClick}
-      />
-    </BoardPage>
+    <>
+      <NextSeo title={'게시물 목록'} description={'게시물 목록'} />
+      <BoardPage>
+        <ContentsList
+          contents={contents}
+          newArticleButtonOnClick={newArticleButtonOnClick}
+        />
+      </BoardPage>
+    </>
   );
 }

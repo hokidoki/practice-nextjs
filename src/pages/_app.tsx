@@ -1,6 +1,8 @@
 import type { AppProps } from 'next/app';
 import '@/msw/server';
 import '@/styles/global-reset.scss';
+import DefaultSeoConfig from '../../seo.config';
+import { DefaultSeo } from 'next-seo';
 import RQ_HydrateProvider from '@/components/providers/RQ_HydrateProvider';
 import SC_DefaultThemeProvider from '@/components/providers/SC_DefaultThemeProvider';
 import initMocks from '@/msw';
@@ -16,6 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <RQ_HydrateProvider dehydratedState={pageProps.dehydratedState}>
         <SC_DefaultThemeProvider>
+          <DefaultSeo {...DefaultSeoConfig} />
           <Component {...pageProps} />
         </SC_DefaultThemeProvider>
       </RQ_HydrateProvider>

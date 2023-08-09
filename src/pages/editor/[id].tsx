@@ -7,7 +7,7 @@ import { GetServerSideProps } from 'next';
 import { getContent } from '@/api/handler/contents';
 import { Content } from '@/types/api';
 import { DashArrayCircleSpinnerWithLayout } from '@/components/Spinner/DashArrayCircleSpinner';
-
+import { NextSeo } from 'next-seo';
 const callback: GetServerSideProps = async (ctx) => {
   try {
     const { id } = ctx.query;
@@ -47,11 +47,19 @@ export default function Editor({ staticContent }: Props) {
   );
 
   return (
-    <EditorPage>
-      {isLoading && (
-        <DashArrayCircleSpinnerWithLayout layoutProps={{ position: 'fixed' }} />
-      )}
-      <ContentEditor {...staticContent} onSubmit={submitCallback} />
-    </EditorPage>
+    <>
+      <NextSeo
+        title={'Edit -' + staticContent.title}
+        description={staticContent.title + '수정중'}
+      />
+      <EditorPage>
+        {isLoading && (
+          <DashArrayCircleSpinnerWithLayout
+            layoutProps={{ position: 'fixed' }}
+          />
+        )}
+        <ContentEditor {...staticContent} onSubmit={submitCallback} />
+      </EditorPage>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { dehydrate } from '@tanstack/react-query';
 import { gsspCallbackWithRQ, gsspWithRq } from '@/utils/server-utils';
+import { NextSeo } from 'next-seo';
 import {
   UNIQUE_KEY,
   useContentQuery,
@@ -77,18 +78,23 @@ export default function ContentPage({ articleId }: Props) {
   if (!content) return <RedirectComponent path={'/error/404'} />;
 
   return (
-    <ContentPageLayout title={content.title}>
-      <ContentViewer
-        {...content}
-        deleteContent={deleteContent}
-        editButtonOnClick={(id) => router.push(`/editor/${id}`)}
-      />
-      <CommentList
-        comments={comments}
-        putComment={({ article, id }) => putComment({ articleId, id, article })}
-        deleteComment={(id) => deleteComment({ id, articleId })}
-        createComment={(article) => createComment({ article, articleId })}
-      />
-    </ContentPageLayout>
+    <>
+      <NextSeo title={content.title} description={content.article} />
+      <ContentPageLayout title={content.title}>
+        <ContentViewer
+          {...content}
+          deleteContent={deleteContent}
+          editButtonOnClick={(id) => router.push(`/editor/${id}`)}
+        />
+        <CommentList
+          comments={comments}
+          putComment={({ article, id }) =>
+            putComment({ articleId, id, article })
+          }
+          deleteComment={(id) => deleteComment({ id, articleId })}
+          createComment={(article) => createComment({ article, articleId })}
+        />
+      </ContentPageLayout>
+    </>
   );
 }
