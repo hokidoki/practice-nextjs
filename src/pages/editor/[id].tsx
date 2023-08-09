@@ -14,7 +14,7 @@ const callback: GetServerSideProps = async (ctx) => {
 
     if (!isString(id))
       return {
-        notFound : true
+        notFound: true,
       };
     const staticContent = await getContent(id);
 

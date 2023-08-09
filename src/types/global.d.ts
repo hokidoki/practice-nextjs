@@ -9,5 +9,6 @@ export interface WithKey {
 }
 
 export interface KnownError {
-  code: string; message: string
+  code: string;
+  message: string;
 }

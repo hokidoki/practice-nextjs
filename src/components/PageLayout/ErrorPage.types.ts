@@ -1,5 +1,3 @@
-import { KnownError } from "@/types/global";
+import { KnownError } from '@/types/global';
 
-export default interface ErrorPageProps extends KnownError {
-
-}
+export default interface ErrorPageProps extends KnownError {}
