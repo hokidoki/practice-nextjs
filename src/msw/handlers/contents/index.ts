@@ -134,14 +134,14 @@ const getComments: Parameters<typeof rest.get>[1] = async (req, res, ctx) => {
 }
 const postComment: Parameters<typeof rest.post>[1] = async (req, res, ctx) => {
 
-    const parsedBody = await req.json<{ comment: string }>().catch(e => Promise.resolve(null));
+    const parsedBody = await req.json<{ article: string }>().catch(e => Promise.resolve(null));
     const { contentId } = req.params;
     if (parsedBody === null || typeof contentId !== "string") return res(
         ctx.status(400)
     )
-    const { comment } = parsedBody;
+    const { article } = parsedBody;
 
-    const data = await DB.postComment({ article: comment, articleId: contentId }).catch(e => Promise.resolve(null));
+    const data = await DB.postComment({ article, articleId: contentId }).catch(e => Promise.resolve(null));
 
     if (data === null) return res(
         ctx.status(500)
