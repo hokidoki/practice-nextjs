@@ -1,6 +1,6 @@
 import ContentsListStyles from './ContentsList.styles';
 import { ContentsListProps } from './ContentsList.types';
-import { ContentsListItem } from '../ListItem/ContentsListItem';
+import ContentsListItem from '../ListItem/ContentsListItem';
 
 export default function ContentsList({
   contents,
