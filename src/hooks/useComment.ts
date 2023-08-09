@@ -1,4 +1,4 @@
-import { deleteComment, getComments, getContent, postComment, putComment } from "@/api/handler/contents";
+import { deleteComment, getComments, postComment, putComment } from "@/api/handler/contents";
 import { Comment } from "@/types/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MutationHookOption } from "./types";
