@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
+import BoardPage from '@/components/PageLayout/BoardPage';
 import ContentsList from '@/components/List/ContentsList';
 import { dehydrate } from '@tanstack/react-query';
 import { gsspCallbackWithRQ, gsspWithRq } from '@/utils/server-utils';
 import { useContents, UNIQUE_KEY } from '@/hooks/useContents';
-import { BoardPage } from '@/components/PageLayout/BoardPage';
+
 import { getContents } from '@/api/handler/contents';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
