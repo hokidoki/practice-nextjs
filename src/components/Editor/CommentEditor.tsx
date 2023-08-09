@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import CommentEditorStyles from './CommentEditor.styles';
 import { CommentEditorProps } from './CommentEditor.types';

@@ -33,6 +33,7 @@ export default function ContentViewer({
         </ContentViewerStyles.CreatedAt>
         <ContentViewerStyles.Controlls>
           <ContentViewerStyles.ControlButton
+            disabled={deleting}
             color="plain"
             onClick={() => editButtonOnClick(id)}
           >

@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContentsListItem match snapshot 1`] = `
+.c0 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: 1px solid rgb(46,48,51);
+  border-radius: 15px;
+  transition: background-color 0.3s;
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+}
+
+.c0:hover {
+  background-color: rgb(33,33,36);
+  cursor: pointer;
+}
+
+.c1 {
+  color: #9aa0a6;
+  font-size: 1.25rem;
+}
+
+.c2 {
+  color: #bdc1c6;
+  font-size: 1.25rem;
+}
+
+<div>
+  <a
+    href="/contents/0"
+    style="display: contents;"
+  >
+    <div
+      class="c0"
+    >
+      <span
+        class="c1"
+      >
+        TITLE
+      </span>
+      <p
+        class="c2"
+      >
+        SUMMARY
+      </p>
+    </div>
+  </a>
+</div>
+`;
