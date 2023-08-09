@@ -9,13 +9,22 @@ import { getContents } from '@/api/handler/contents';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 const callback: gsspCallbackWithRQ = async (client, _) => {
-  await client.prefetchQuery({ queryFn: getContents, queryKey: UNIQUE_KEY });
-
-  return {
-    props: {
-      dehydratedState: dehydrate(client),
-    },
-  };
+  try {
+    await client.prefetchQuery({ queryFn: getContents, queryKey: UNIQUE_KEY });
+    return {
+      props: {
+        dehydratedState: dehydrate(client),
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/500',
+      },
+      props: {},
+    };
+  }
 };
 
 export const getServerSideProps = gsspWithRq(callback);

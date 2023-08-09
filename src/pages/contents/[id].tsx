@@ -49,7 +49,11 @@ const callback: gsspCallbackWithRQ = async (client, ctx) => {
     };
   } catch (error) {
     return {
-      notFound: true,
+      redirect: {
+        permanent: false,
+        destination: '/500',
+      },
+      props: {},
     };
   }
 };

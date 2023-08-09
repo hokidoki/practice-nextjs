@@ -14,7 +14,7 @@ const callback: GetServerSideProps = async (ctx) => {
 
     if (!isString(id))
       return {
-        notFound: true,
+        notFound : true
       };
     const staticContent = await getContent(id);
 
@@ -25,7 +25,11 @@ const callback: GetServerSideProps = async (ctx) => {
     };
   } catch (error) {
     return {
-      notFound: true,
+      redirect: {
+        permanent: false,
+        destination: '/500',
+      },
+      props: {},
     };
   }
 };
