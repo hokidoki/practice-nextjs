@@ -1,8 +1,6 @@
-import contentsHandler from "./contents";
+import contentsHandler from './contents';
 
 /**
  * mockup handlers
  */
-export default [
-    ...contentsHandler
-]
+export default [...contentsHandler];

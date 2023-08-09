@@ -1,4 +1,3 @@
-import { MinContent } from "@/types/api";
+import { MinContent } from '@/types/api';
 
-
-export default interface MinContentListItemProps extends MinContent { }
+export default interface MinContentListItemProps extends MinContent {}

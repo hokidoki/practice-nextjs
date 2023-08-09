@@ -12,7 +12,7 @@ const ContentListItemStyles = (() => {
     padding: 10px;
     &:hover {
       background-color: ${({ theme }) => theme.backgroundcolor.layer_2};
-      cursor : pointer;
+      cursor: pointer;
     }
   `;
 
@@ -33,4 +33,4 @@ const ContentListItemStyles = (() => {
   };
 })();
 
-export default ContentListItemStyles
+export default ContentListItemStyles;
