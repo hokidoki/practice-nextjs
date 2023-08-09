@@ -1,5 +1,4 @@
-import type { Content, Comment } from '@/types/api';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { dehydrate } from '@tanstack/react-query';
 import { gsspCallbackWithRQ, gsspWithRq } from '@/utils/server-utils';
 import {
