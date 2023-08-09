@@ -3,6 +3,8 @@ import { Content } from "@/types/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { UNIQUE_KEY as CONTENTS_UNIQUE_KEY } from "./useContents";
+import { MutationHookOption } from "./types";
+import { deleteError, postError, putError } from "./utils";
 
 export const UNIQUE_KEY = (contentId: string) => ["CONTENTS", contentId];
 
@@ -24,7 +26,7 @@ export function useContentQuery({ contentId, initialData }: { contentId: string,
     }
 }
 
-export function useCreateContent() {
+export function useCreateContent({ onError = postError }: MutationHookOption) {
     const router = useRouter();
     const client = useQueryClient();
 
@@ -38,8 +40,8 @@ export function useCreateContent() {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
                 router.push('/contents')
             }
-
-        }
+        },
+        onError
     })
 
     return {
@@ -49,7 +51,7 @@ export function useCreateContent() {
     }
 }
 
-export function usePutContent() {
+export function usePutContent({ onError = putError }: MutationHookOption) {
     const router = useRouter();
     const client = useQueryClient();
 
@@ -65,9 +67,7 @@ export function usePutContent() {
                 router.push('/contents')
             }
         },
-        onError: () => {
-            console.log("ERROR")
-        }
+        onError,
     })
 
     return {
@@ -77,7 +77,7 @@ export function usePutContent() {
     }
 }
 
-export function useDeleteContent() {
+export function useDeleteContent({ onError = deleteError }: MutationHookOption) {
     const router = useRouter();
     const client = useQueryClient();
 
@@ -93,9 +93,7 @@ export function useDeleteContent() {
                 router.push('/contents')
             }
         },
-        onError: () => {
-            console.log("ERROR")
-        }
+        onError,
     })
 
     return {

@@ -4,7 +4,7 @@ import { useCreateContent } from '@/hooks/useContent';
 import React, { useCallback } from 'react';
 
 export default function Editor() {
-  const { mutateAsync, isLoading, isError } = useCreateContent();
+  const { mutateAsync } = useCreateContent({});
 
   return (
     <EditorPage>

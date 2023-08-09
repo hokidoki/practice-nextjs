@@ -37,7 +37,7 @@ interface Props {
 }
 
 export default function Editor({ staticContent }: Props) {
-  const { mutateAsync, isLoading, isError } = usePutContent();
+  const { mutateAsync, isLoading } = usePutContent({});
   const { id, createdAt } = staticContent;
 
   const submitCallback = useCallback(

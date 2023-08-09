@@ -64,10 +64,10 @@ export default function ContentPage({ articleId }: Props) {
   const router = useRouter();
 
   // Mutations
-  const { mutateAsync: createComment } = useCreateComment();
-  const { mutateAsync: putComment } = usePutComment();
-  const { mutateAsync: deleteComment } = useDeleteComment();
-  const { mutateAsync: deleteContent } = useDeleteContent();
+  const { mutateAsync: createComment } = useCreateComment({});
+  const { mutateAsync: putComment } = usePutComment({});
+  const { mutateAsync: deleteComment } = useDeleteComment({});
+  const { mutateAsync: deleteContent } = useDeleteContent({});
   const { data: content } = useContentQuery({
     contentId: articleId,
   });

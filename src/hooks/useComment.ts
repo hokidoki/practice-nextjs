@@ -1,6 +1,8 @@
 import { deleteComment, getComments, getContent, postComment, putComment } from "@/api/handler/contents";
 import { Comment } from "@/types/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { MutationHookOption } from "./types";
+import { deleteError, postError, putError } from "./utils";
 
 export const UNIQUE_KEY = (contentId: string) => ["CONTENTS", contentId, "Comment"];
 
@@ -21,7 +23,7 @@ export function useCommentQuery({ articleId, initialData = [] }: { articleId: st
 }
 
 
-export function useCreateComment() {
+export function useCreateComment({ onError = postError }: MutationHookOption) {
     const client = useQueryClient();
 
     const { mutateAsync, isLoading, isError } = useMutation({
@@ -33,7 +35,8 @@ export function useCreateComment() {
             } catch (error) {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
             }
-        }
+        },
+        onError
     })
 
     return {
@@ -43,7 +46,7 @@ export function useCreateComment() {
     }
 }
 
-export function usePutComment() {
+export function usePutComment({ onError = putError }: MutationHookOption) {
     const client = useQueryClient();
 
     const { mutateAsync, isLoading, isError } = useMutation({
@@ -56,9 +59,7 @@ export function usePutComment() {
             } catch (error) {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
             }
-        }, onError: () => {
-            console.log("??")
-        }
+        }, onError
     })
 
     return {
@@ -68,7 +69,7 @@ export function usePutComment() {
     }
 }
 
-export function useDeleteComment() {
+export function useDeleteComment({ onError = deleteError }: MutationHookOption) {
     const client = useQueryClient();
 
     const { mutateAsync, isLoading, isError } = useMutation({
@@ -80,7 +81,8 @@ export function useDeleteComment() {
             } catch (error) {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
             }
-        }
+        },
+        onError
     })
 
     return {
