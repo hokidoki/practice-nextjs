@@ -1,7 +1,7 @@
-import type { Content, Comment } from '@/types/api';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { dehydrate } from '@tanstack/react-query';
 import { gsspCallbackWithRQ, gsspWithRq } from '@/utils/server-utils';
+import { NextSeo } from 'next-seo';
 import {
   UNIQUE_KEY,
   useContentQuery,
@@ -10,6 +10,9 @@ import {
 import {
   UNIQUE_KEY as COMMENT_UNIQUE_KEY,
   useCommentQuery,
+  useCreateComment,
+  useDeleteComment,
+  usePutComment,
 } from '@/hooks/useComment';
 import { getComments, getContent } from '@/api/handler/contents';
 import { isString } from '@fxts/core';
@@ -17,6 +20,7 @@ import { useRouter } from 'next/router';
 import ContentPageLayout from '@/components/PageLayout/ContentPage';
 import ContentViewer from '@/components/Viewer/ContentViewer';
 import CommentList from '@/components/List/CommentList';
+import RedirectComponent from '@/components/Utils/RedirectComponent';
 
 const callback: gsspCallbackWithRQ = async (client, ctx) => {
   try {
@@ -26,24 +30,21 @@ const callback: gsspCallbackWithRQ = async (client, ctx) => {
       return {
         notFound: true,
       };
-    const staticContent = await getContent(id);
-    const staticComments = await getComments(id);
-    await client.prefetchQuery({
-      queryFn: () => getComments(id),
-      queryKey: COMMENT_UNIQUE_KEY(id),
-      initialData: staticComments,
-    });
-    await client.prefetchQuery({
-      queryFn: () => getContent(id),
-      queryKey: UNIQUE_KEY(id),
-      initialData: staticContent,
-    });
+    await Promise.all([
+      client.prefetchQuery({
+        queryFn: () => getComments(id),
+        queryKey: COMMENT_UNIQUE_KEY(id),
+      }),
+      client.prefetchQuery({
+        queryFn: () => getContent(id),
+        queryKey: UNIQUE_KEY(id),
+      }),
+    ]);
 
     return {
       props: {
         dehydratedState: dehydrate(client),
-        staticContent,
-        staticComments,
+        articleId: id,
       },
     };
   } catch (error) {
@@ -52,43 +53,48 @@ const callback: gsspCallbackWithRQ = async (client, ctx) => {
     };
   }
 };
-
+// getStaticSiteProps로 가자.
 export const getServerSideProps = gsspWithRq(callback);
 
 interface Props {
-  staticContent: Content;
-  staticComments: Comment[];
+  articleId: string;
 }
 
-export default function ContentPage({ staticContent, staticComments }: Props) {
+export default function ContentPage({ articleId }: Props) {
   const router = useRouter();
-  const { mutateAsync, isSuccess } = useDeleteContent();
+
+  // Mutations
+  const { mutateAsync: createComment } = useCreateComment({});
+  const { mutateAsync: putComment } = usePutComment({});
+  const { mutateAsync: deleteComment } = useDeleteComment({});
+  const { mutateAsync: deleteContent } = useDeleteContent({});
   const { data: content } = useContentQuery({
-    contentId: staticContent.id,
-    initialData: staticContent,
-    enabled: false,
+    contentId: articleId,
   });
 
   const { data: comments } = useCommentQuery({
-    contentId: staticContent.id,
-    initialData: staticComments,
-    enabled: false,
+    articleId,
   });
+  if (!content) return <RedirectComponent path={'/error/404'} />;
 
-  const deleteButtonOnClick = useCallback(
-    (id: string) => {
-      if (confirm('삭제 하시겠습니까?')) mutateAsync(id);
-    },
-    [mutateAsync]
-  );
   return (
-    <ContentPageLayout title={content.title}>
-      <ContentViewer
-        {...content}
-        deleteButtonOnClick={deleteButtonOnClick}
-        editButtonOnClick={(id) => router.push(`/editor/${id}`)}
-      />
-      <CommentList comments={comments} />
-    </ContentPageLayout>
+    <>
+      <NextSeo title={content.title} description={content.article} />
+      <ContentPageLayout title={content.title}>
+        <ContentViewer
+          {...content}
+          deleteContent={deleteContent}
+          editButtonOnClick={(id) => router.push(`/editor/${id}`)}
+        />
+        <CommentList
+          comments={comments}
+          putComment={({ article, id }) =>
+            putComment({ articleId, id, article })
+          }
+          deleteComment={(id) => deleteComment({ id, articleId })}
+          createComment={(article) => createComment({ article, articleId })}
+        />
+      </ContentPageLayout>
+    </>
   );
 }

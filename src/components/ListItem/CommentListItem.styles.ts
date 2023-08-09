@@ -5,8 +5,10 @@ import ContentViewerStyles from '../Viewer/ContentViewer.styles';
 const CommentListItemStyles = (() => {
     const Layout = styled.div`
         ${({ theme }) => theme.mixin.flexbox({ direction: 'column', align: 'center' })};
+        position: relative;
         width: 100%;
         min-height: 200px;
+        height: 200px;
         border: 2px solid ${({ theme }) => theme.bordercolor.layer_1};
         border-radius: 10px;
   `;

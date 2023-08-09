@@ -1,4 +1,4 @@
-import { curry, join } from "@fxts/core";
+import { join } from "@fxts/core";
 
 
 /**

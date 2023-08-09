@@ -90,21 +90,23 @@ const db = (() => {
         )
     })
 
-    const postComment = delaiedFn((comment: Comment) => {
-        comments = pipe(comments, append({ ...comment, id: randomUUID() as string, createdAt: new Date().toUTCString() }), toArray);
-        return comments;
+    const postComment = delaiedFn((comment: { articleId: string, article: string }) => {
+        const newComment = { ...comment, id: randomUUID() as string, createdAt: new Date().toUTCString() }
+        comments = pipe(comments, append(newComment), toArray);
+        return newComment;
     })
 
-    const putComment = delaiedFn((comment: Comment) => {
+    const putComment = delaiedFn(({ article, articleId, id }: Pick<Comment, "article" | "id" | 'articleId'>) => {
         let targetIndex = -1;
-        if (0 > (targetIndex = findIndex((c) => c.id === comment.id, comments))) return null;
-        comments = replace(comment, targetIndex, comments)
-        return comment;
+        if (0 > (targetIndex = findIndex((c) => c.id === id && c.articleId === articleId, comments))) return null;
+        const newComment = { ...comments[targetIndex], article };
+        comments = replace(newComment, targetIndex, comments)
+        return newComment;
     })
 
-    const deleteComment = delaiedFn((id: string) => {
+    const deleteComment = delaiedFn(({ id, articleId }: Pick<Comment, "articleId" | "id">) => {
         let target: Comment | undefined;
-        if (isUndefined(target = find(c => c.id === id, comments))) return null;
+        if (isUndefined(target = find(c => c.id === id && articleId === c.articleId, comments))) return null;
         comments = pipe(comments, filter((c) => c.id !== target!.id), toArray);
         return id;
     })

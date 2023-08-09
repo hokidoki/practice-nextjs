@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from 'react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   DehydratedState,
   Hydrate,
@@ -28,6 +29,9 @@ export default function RQ_HydrateProvider({
     <>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={dehydratedState}>{children}</Hydrate>
+        {process.env.NEXT_PUBLIC_API_MOCKING === 'DEV' && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
       </QueryClientProvider>
     </>
   );

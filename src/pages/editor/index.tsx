@@ -1,14 +1,17 @@
 import ContentEditor from '@/components/Editor/ContentEditor';
 import EditorPage from '@/components/PageLayout/EditorPage';
 import { useCreateContent } from '@/hooks/useContent';
-import React, { useCallback } from 'react';
-
+import React from 'react';
+import { NextSeo } from 'next-seo';
 export default function Editor() {
-  const { mutateAsync, isLoading, isError } = useCreateContent();
+  const { mutateAsync } = useCreateContent({});
 
   return (
-    <EditorPage>
-      <ContentEditor onSubmit={mutateAsync} />
-    </EditorPage>
+    <>
+      <NextSeo title={'Editor'} description={'새 게시물'} />
+      <EditorPage>
+        <ContentEditor onSubmit={mutateAsync} />
+      </EditorPage>
+    </>
   );
 }

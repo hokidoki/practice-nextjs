@@ -6,7 +6,8 @@ import { isString } from '@fxts/core';
 import { GetServerSideProps } from 'next';
 import { getContent } from '@/api/handler/contents';
 import { Content } from '@/types/api';
-
+import { DashArrayCircleSpinnerWithLayout } from '@/components/Spinner/DashArrayCircleSpinner';
+import { NextSeo } from 'next-seo';
 const callback: GetServerSideProps = async (ctx) => {
   try {
     const { id } = ctx.query;
@@ -36,19 +37,29 @@ interface Props {
 }
 
 export default function Editor({ staticContent }: Props) {
-  const { mutateAsync, isLoading, isError } = usePutContent();
+  const { mutateAsync, isLoading } = usePutContent({});
   const { id, createdAt } = staticContent;
 
   const submitCallback = useCallback(
-    ({ article, title }: { article: string; title: string }) => {
-      mutateAsync({ article, title, id, createdAt });
-    },
+    ({ article, title }: { article: string; title: string }) =>
+      mutateAsync({ article, title, id, createdAt }),
     [id, createdAt, mutateAsync]
   );
 
   return (
-    <EditorPage>
-      <ContentEditor {...staticContent} onSubmit={submitCallback} />
-    </EditorPage>
+    <>
+      <NextSeo
+        title={'Edit -' + staticContent.title}
+        description={staticContent.title + '수정중'}
+      />
+      <EditorPage>
+        {isLoading && (
+          <DashArrayCircleSpinnerWithLayout
+            layoutProps={{ position: 'fixed' }}
+          />
+        )}
+        <ContentEditor {...staticContent} onSubmit={submitCallback} />
+      </EditorPage>
+    </>
   );
 }

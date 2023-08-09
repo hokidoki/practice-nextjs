@@ -132,7 +132,76 @@ const getComments: Parameters<typeof rest.get>[1] = async (req, res, ctx) => {
         })
     )
 }
+const postComment: Parameters<typeof rest.post>[1] = async (req, res, ctx) => {
 
+    const parsedBody = await req.json<{ article: string }>().catch(e => Promise.resolve(null));
+    const { contentId } = req.params;
+    if (parsedBody === null || typeof contentId !== "string") return res(
+        ctx.status(400)
+    )
+    const { article } = parsedBody;
+
+    const data = await DB.postComment({ article, articleId: contentId }).catch(e => Promise.resolve(null));
+
+    if (data === null) return res(
+        ctx.status(500)
+    )
+
+    return res(
+        ctx.status(200),
+        ctx.json({
+            message: "OK",
+            data
+        })
+    );
+};
+
+const putConmment: Parameters<typeof rest.put>[1] = async (req, res, ctx) => {
+    const { contentId: articleId, commentId: id } = req.params;
+
+    if (typeof articleId !== "string" || typeof id !== "string") return res(
+        ctx.status(400)
+    )
+
+    const { article } = await req.json<{ article: string }>().catch(e => Promise.resolve({ article: null }));
+    if (article === null) return res(
+        ctx.status(400)
+    )
+    const data = await DB.putComment({ id, articleId, article }).catch(e => Promise.resolve(null));
+    if (data === null) return res(
+        ctx.status(500)
+    )
+
+    return res(
+        ctx.status(200),
+        ctx.json({
+            message: "OK",
+            data
+        })
+    );
+};
+
+const deleteComment: Parameters<typeof rest.delete>[1] = async (req, res, ctx) => {
+    const { contentId: articleId, commentId: id } = req.params;
+
+    if (typeof articleId !== "string" || typeof id !== "string") return res(
+        ctx.status(400)
+    )
+
+
+    const data = await DB.deleteComment({ id, articleId }).catch(e => Promise.resolve(null));
+    if (data === null) return res(
+        ctx.status(500)
+    )
+
+    return res(
+        ctx.status(200),
+        ctx.json({
+            message: "OK",
+            data
+        })
+    );
+};
 
 export default [
     rest.post(BASE_URL + "/equalizer", clientEqualize),
@@ -142,5 +211,7 @@ export default [
     rest.put(path(":contentId"), putContent),
     rest.delete(path(":contentId"), deleteContent),
     rest.get(path(":contentId", "comments"), getComments),
-
+    rest.post(path(":contentId", "comments"), postComment),
+    rest.put(path(":contentId", "comments", ":commentId"), putConmment),
+    rest.delete(path(":contentId", "comments", ":commentId"), deleteComment),
 ]

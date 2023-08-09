@@ -3,16 +3,20 @@ import { Content } from "@/types/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { UNIQUE_KEY as CONTENTS_UNIQUE_KEY } from "./useContents";
+import { MutationHookOption } from "./types";
+import { deleteError, postError, putError } from "./utils";
 
 export const UNIQUE_KEY = (contentId: string) => ["CONTENTS", contentId];
 
-export function useContentQuery({ contentId, initialData, enabled }: { enabled: boolean, contentId: string, initialData: Content }) {
+export function useContentQuery({ contentId, initialData }: { contentId: string, initialData?: Content }) {
 
+    /**
+     * refetchOnWindowFocus는 confirm이후 window로 focus되면서 작동함
+     */
     const q = useQuery<Content>({
         queryFn: () => getContent(contentId),
-        enabled,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
+        refetchOnMount: true,
+        refetchOnWindowFocus: false,
         queryKey: UNIQUE_KEY(contentId),
         initialData,
     })
@@ -22,7 +26,7 @@ export function useContentQuery({ contentId, initialData, enabled }: { enabled: 
     }
 }
 
-export function useCreateContent() {
+export function useCreateContent({ onError = postError }: MutationHookOption) {
     const router = useRouter();
     const client = useQueryClient();
 
@@ -32,13 +36,12 @@ export function useCreateContent() {
             try {
                 await client.invalidateQueries(CONTENTS_UNIQUE_KEY);
                 router.push(`/contents/${data.id}`)
-
             } catch (error) {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
                 router.push('/contents')
             }
-
-        }
+        },
+        onError
     })
 
     return {
@@ -48,7 +51,7 @@ export function useCreateContent() {
     }
 }
 
-export function usePutContent() {
+export function usePutContent({ onError = putError }: MutationHookOption) {
     const router = useRouter();
     const client = useQueryClient();
 
@@ -63,7 +66,8 @@ export function usePutContent() {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
                 router.push('/contents')
             }
-        }
+        },
+        onError,
     })
 
     return {
@@ -73,7 +77,7 @@ export function usePutContent() {
     }
 }
 
-export function useDeleteContent() {
+export function useDeleteContent({ onError = deleteError }: MutationHookOption) {
     const router = useRouter();
     const client = useQueryClient();
 
@@ -82,15 +86,14 @@ export function useDeleteContent() {
         onSuccess: async (data) => {
             try {
                 const contentQueryKey = UNIQUE_KEY(data);
-                client.invalidateQueries(CONTENTS_UNIQUE_KEY);
-                client.removeQueries(contentQueryKey);
-                client.resetQueries(contentQueryKey)
+                client.setQueriesData(contentQueryKey, undefined);
                 router.push(`/contents`);
             } catch (error) {
                 alert("데이터를 갱신하던 중 에러가 발생했습니다.");
                 router.push('/contents')
             }
-        }
+        },
+        onError,
     })
 
     return {

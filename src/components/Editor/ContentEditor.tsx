@@ -10,6 +10,7 @@ export default function ContentEditor({
 }: ContentEditorProps) {
   const [title, seTtitle] = useState(__title__);
   const [article, setArticle] = useState(__article__);
+  const [isLoading, setIsLoading] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const disabled = useMemo(() => {
     const minimumLength = 3;
@@ -21,7 +22,8 @@ export default function ContentEditor({
       if (title === __title__ && article === __article__)
         return alert('기존과 동일하게 수정 할 수 없습니다.');
 
-      onSubmit({ title, article });
+      setIsLoading(true);
+      onSubmit({ title, article }).catch(() => setIsLoading(false));
     },
     [__title__, __article__, onSubmit]
   );
@@ -31,18 +33,19 @@ export default function ContentEditor({
       <ContentEditorStyle.TitleInput
         placeholder={'제목을 입력하세요'}
         value={title}
+        disabled={isLoading}
         onChange={(e) => seTtitle(e.target.value)}
       />
       <ContentEditorStyle.ArticleTextArea onClick={() => ref.current?.focus()}>
         <ContentEditable
           innerRef={ref}
           html={article}
-          disabled={false}
+          disabled={isLoading}
           onChange={(e) => setArticle(e.target.value)}
         />
       </ContentEditorStyle.ArticleTextArea>
       <ContentEditorStyle.SubmitButton
-        disabled={disabled}
+        disabled={disabled || isLoading}
         onClick={() => preSubmitHandler(title, article)}
       >
         저장
